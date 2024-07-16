@@ -123,10 +123,12 @@ T = [['.....',
       '.00..',
       '..0..',
       '.....']]
-
+"""
+does not work right now
 from PIL import Image
 img = Image.open('1State.png').convert('LA')
 img.save('greyscale.png')
+"""
 
 shapes = [S, Z, I, O, J, L, T]
 shape_colors = [(img,0,10), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
