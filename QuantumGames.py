@@ -131,7 +131,7 @@ img.save('greyscale.png')
 """
 
 shapes = [S, Z, I, O, J, L, T]
-shape_colors = [(img,0,10), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
+shape_colors = [(0,255,0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
 # index 0 - 6 represent shape
 
 class Piece(object):
