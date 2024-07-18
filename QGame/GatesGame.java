@@ -11,6 +11,7 @@ public class GatesGame {
     private String[] guesses;
     private int speed;
     private int layers;
+    private int rows;
     private int lives;
 
     public GatesGame() {
@@ -20,15 +21,16 @@ public class GatesGame {
         guess = "Nothing Guessed";
         speed = 650;
         layers = 1;
+        rows = 2;
         lives = 3;
 
         for(int col = 0; col < grid[0].length; col++) {
             if(col >= 18 - layers && col < 18) {
-                for(int row = 0; row < 2; row++) {
+                for(int row = 0; row < rows; row++) {
                     grid[row][col] = new Gate("I");
                 }
             } else {
-                for(int row = 0; row < 2; row++) {
+                for(int row = 0; row < rows; row++) {
                     grid[row][col] = new Space();
                 }
             }
@@ -38,7 +40,7 @@ public class GatesGame {
     public void spawnNewQubits() {
         correctAnswer = "";
         guess = "Nothing Guessed";
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < rows; i++) {
             String num = Math.random() > 0.5 ? "0" : "1";
             grid[i][0] = new Qubit(num);
             correctAnswer += num; //temp
@@ -52,7 +54,7 @@ public class GatesGame {
                 grid[j][i] = grid[j][i - 1];
             }
         }
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < rows; i++) {
             grid[i][0] = new Space();
         }
     }
@@ -137,7 +139,7 @@ public class GatesGame {
             System.out.print("-");
         }
         System.out.println();
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < rows; i++) {
             Space[] row = grid[i];
             System.out.print("|");
             for(Space s : row) {
