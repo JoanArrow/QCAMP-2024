@@ -127,7 +127,7 @@ public class GatesGame {
         for(int i = 0; i < 100; i++) {
             System.out.println();
         }
-        for(int i = 0; i < 42; i++) {
+        for(int i = 0; i < 43; i++) {
             System.out.print("-");
         }
         System.out.println();
@@ -135,7 +135,7 @@ public class GatesGame {
         System.out.println("Correct answer (for testing): |" + correctAnswer + ">");
         System.out.println("Lives Remaining: " + lives);
         System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
-        for(int i = 0; i < 42; i++) {
+        for(int i = 0; i < 43; i++) {
             System.out.print("-");
         }
         System.out.println();
@@ -143,14 +143,19 @@ public class GatesGame {
             Space[] row = grid[i];
             System.out.print("|");
             for(Space s : row) {
-                System.out.print(" " + s.getSymbol());
-                if(s.getSymbol().equals("")) {
-                    System.out.print(" ");
+                String symbol = s.getSymbol();
+                if(symbol.equals("0") || symbol.equals("1") || symbol.equals("+") || symbol.equals("-")) {
+                    System.out.print("|" + symbol + ">");
+                } else {
+                    System.out.print(" " + s.getSymbol());
+                    if(s.getSymbol().equals("")) {
+                        System.out.print(" ");
+                    }
                 }
             }
             System.out.println("|");
         }
-        for(int i = 0; i < 42; i++) {
+        for(int i = 0; i < 43; i++) {
             System.out.print("-");
         }
         System.out.println();
