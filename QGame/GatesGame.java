@@ -8,15 +8,19 @@ public class GatesGame {
     private Space[][] grid;
     private String[] correctAnswer;
     private String[] guess;
+    private int speed;
+    private int layers;
 
     public GatesGame() {
         grid = new Space[3][20];
         correctAnswer = new String[3];
         input = new Scanner(System.in);
         guess = new String[] {"0", "0", "0"};
+        speed = 650;
+        layers = 1;
 
         for(int col = 0; col < grid[0].length; col++) {
-            if(col >= 15 && col < 18) {
+            if(col >= 18 - layers && col < 18) {
                 for(int row = 0; row < 3; row++) {
                     grid[row][col] = new Gate("I");
                 }
@@ -38,7 +42,7 @@ public class GatesGame {
     }
 
     public void shiftRight() {
-        for(int i = 14; i >= 1; i--) {
+        for(int i = 17 - layers; i >= 1; i--) {
             for(int j = 0; j < 3; j++) {
                 grid[j][i] = grid[j][i - 1];
             }
@@ -65,7 +69,7 @@ public class GatesGame {
         };
 
         Timer timeToNext = new Timer("Time to Next Tick");
-        timeToNext.schedule(step, 0, 500);
+        timeToNext.schedule(step, 0, speed);
     }
 
     public void print() {
