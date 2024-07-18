@@ -11,6 +11,7 @@ public class GatesGame {
     private String[] guesses;
     private int speed;
     private int layers;
+    private int lives;
 
     public GatesGame() {
         grid = new Space[2][20];
@@ -19,6 +20,7 @@ public class GatesGame {
         guess = "Nothing Guessed";
         speed = 650;
         layers = 1;
+        lives = 3;
 
         for(int col = 0; col < grid[0].length; col++) {
             if(col >= 18 - layers && col < 18) {
@@ -35,6 +37,7 @@ public class GatesGame {
 
     public void spawnNewQubits() {
         correctAnswer = "";
+        guess = "Nothing Guessed";
         for(int i = 0; i < 2; i++) {
             String num = Math.random() > 0.5 ? "0" : "1";
             grid[i][0] = new Qubit(num);
@@ -75,12 +78,39 @@ public class GatesGame {
         getNextGuess();
     }
 
+    public boolean currentGuessCorrect() {
+        return guess.equals(correctAnswer);
+    }
+
+    public int getQubitPosition() {
+        for(int i = 0; i < 18; i++) {
+            if(grid[0][i].getSymbol().length() > 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void checkWinOrLoss() {
+        if(getQubitPosition() == 17) {
+            if(!currentGuessCorrect()) {
+                lives--;
+                System.out.println("Game Over!");
+                if(lives == 0) {
+                    System.exit(0);
+                }
+            }
+            spawnNewQubits();
+        }
+    }
+
     public void checkSpeedRequested() {
     }
 
     public void ticker() {
         TimerTask step = new TimerTask() {
             public void run() {
+                checkWinOrLoss();
                 shiftRight();
                 print();
             }
@@ -99,8 +129,9 @@ public class GatesGame {
             System.out.print("-");
         }
         System.out.println();
-        System.out.println("Guess: |" + guess + ">");
+        System.out.println("Guess:                        |" + guess + ">");
         System.out.println("Correct answer (for testing): |" + correctAnswer + ">");
+        System.out.println("Lives Remaining: " + lives);
         System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
         for(int i = 0; i < 42; i++) {
             System.out.print("-");
