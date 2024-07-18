@@ -7,6 +7,7 @@ public class GatesGame {
     private Scanner input;
     private Space[][] grid;
     private String correctAnswer;
+    private String[] nonSpAnswers;
     private String guess;
     private String[] guesses;
     private int speed;
@@ -15,9 +16,10 @@ public class GatesGame {
     private int lives;
 
     public GatesGame() {
-        grid = new Space[2][20];
+        grid = new Space[3][20];
         input = new Scanner(System.in);
         guesses = new String[] {"00", "01", "10", "11"};
+        nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
         guess = "Nothing Guessed";
         speed = 650;
         layers = 1;
@@ -45,7 +47,11 @@ public class GatesGame {
             grid[i][0] = new Qubit(num);
             correctAnswer += num; //temp
         }
+    }
 
+    public void fillGuesses() {
+        //if you dont use the h gate:
+        int cPos = (int) (Math.random() * 4);
     }
 
     public void shiftRight() {
@@ -60,7 +66,6 @@ public class GatesGame {
     }
 
     public void getNextGuess() {
-        //unfunctional rn but Im tired so good bye
         String entered = input.nextLine();
 
         switch (entered) {
