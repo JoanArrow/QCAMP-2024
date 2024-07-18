@@ -60,6 +60,9 @@ public class GatesGame {
         getNextGuess();
     }
 
+    public void checkSpeedRequested() {
+    }
+
     public void ticker() {
         TimerTask step = new TimerTask() {
             public void run() {
@@ -107,5 +110,6 @@ public class GatesGame {
         game.spawnNewQubits();
         game.print();
         game.ticker();
+        game.getNextGuess();
     }
 }
