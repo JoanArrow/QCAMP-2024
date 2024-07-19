@@ -21,7 +21,7 @@ public class GatesGame {
         input = new Scanner(System.in);
         guesses = new String[] {"00", "01", "10", "11"};
         nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
-        guess = "Nothing Guessed";
+        guess = "NaN";
         speed = 650;
         layers = 1;
         rows = 3;
@@ -42,7 +42,7 @@ public class GatesGame {
 
     public void spawnNewQubits() {
         correctAnswer = "";
-        guess = "Nothing Guessed";
+        guess = "NaN";
         for(int i = 0; i < rows; i++) {
             String num = Math.random() > 0.5 ? "0" : "1";
             grid[i][0] = new Qubit(num);
@@ -151,7 +151,6 @@ public class GatesGame {
             System.out.print("-");
         }
         System.out.println();
-        System.out.println("Guess:                        |" + guess + ">");
         System.out.println("Correct answer (for testing): |" + correctAnswer + ">");
         System.out.println("Lives Remaining: " + lives);
         System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
@@ -173,7 +172,7 @@ public class GatesGame {
                     }
                 }
             }
-            System.out.println("|");
+            System.out.println(guess.equals("NaN") ? "|" : "|   |" + guess.substring(i, i + 1) + ">");
         }
         for(int i = 0; i < 43; i++) {
             System.out.print("-");
