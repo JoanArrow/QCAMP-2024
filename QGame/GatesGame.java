@@ -1,4 +1,5 @@
 package QGame;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +24,7 @@ public class GatesGame {
         guess = "Nothing Guessed";
         speed = 650;
         layers = 1;
-        rows = 2;
+        rows = 3;
         lives = 3;
 
         for(int col = 0; col < grid[0].length; col++) {
@@ -47,16 +48,30 @@ public class GatesGame {
             grid[i][0] = new Qubit(num);
             correctAnswer += num; //temp
         }
+        fillGuesses();
     }
 
     public void fillGuesses() {
         //if you dont use the h gate:
+        ArrayList<String> unused = new ArrayList<>();
+        for(int i = 0; i < nonSpAnswers.length; i++) {
+            unused.add(nonSpAnswers[i]);
+        }
         int cPos = (int) (Math.random() * 4);
+        unused.remove(unused.indexOf(correctAnswer));
+        guesses[cPos] = correctAnswer;
+        for(int i = 0; i < 4; i++) {
+            if(i != cPos) {
+                int ranUnused = (int) (Math.random() * unused.size());
+                guesses[i] = unused.get(ranUnused);
+                unused.remove(ranUnused);
+            }
+        }
     }
 
     public void shiftRight() {
         for(int i = 17 - layers; i >= 1; i--) {
-            for(int j = 0; j < 2; j++) {
+            for(int j = 0; j < rows; j++) {
                 grid[j][i] = grid[j][i - 1];
             }
         }
