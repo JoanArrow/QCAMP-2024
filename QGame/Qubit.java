@@ -38,4 +38,8 @@ public class Qubit extends Space {
         state = other.getSymbol();
         other.setState(temp);
     }
+
+    public boolean isSuperposition() {
+        return state.equals("+") || state.equals("-");
+    }
 }

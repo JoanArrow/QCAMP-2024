@@ -17,6 +17,7 @@ public class GatesGame implements Runnable {
     private Space[][] grid;
     private String correctAnswer;
     private String[] nonSpAnswers;
+    private String[] hasSpAnswers;
     private String guess;
     private String[] guesses;
     private int speed;
@@ -31,6 +32,22 @@ public class GatesGame implements Runnable {
         grid = new Space[3][20];
         guesses = new String[] {"00", "01", "10", "11"};
         nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
+        hasSpAnswers = new String[64];
+        int numSoFar = 0;
+        String[] translator = new String[] {"0", "1", "+", "-"};
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                for(int l = 0; l < 4; l++) {
+                    String toAdd = "";
+                    toAdd += translator[i];
+                    toAdd += translator[j];
+                    toAdd += translator[l];
+                    hasSpAnswers[numSoFar] = toAdd;
+                    toAdd = "";
+                    numSoFar++;
+                }
+            }
+        }
         guess = "NaN";
         speed = 650;
         layers = 1;
@@ -68,7 +85,13 @@ public class GatesGame implements Runnable {
         for(int col = 0; col < grid[0].length; col++) {
             if(col >= 18 - layers && col < 18) {
                 for(int row = 0; row < rows; row++) {
-                    grid[row][col] = new Gate("I");
+                    if(Math.random() < 0.33) {
+                        grid[row][col] = new Identity();
+                    } else if (Math.random() < 0.5) {
+                        grid[row][col] = new Not();
+                    } else {
+                        grid[row][col] = new Hadamard();
+                    }
                 }
             } else {
                 for(int row = 0; row < rows; row++) {
@@ -81,19 +104,45 @@ public class GatesGame implements Runnable {
     public void spawnNewQubits() {
         correctAnswer = "";
         guess = "NaN";
+        for(int row = 0; row < rows; row++) {
+            if(Math.random() < 0.33) {
+                grid[row][18 - layers] = new Identity();
+            } else if (Math.random() < 0.5) {
+                grid[row][18 - layers] = new Not();
+            } else {
+                grid[row][18 - layers] = new Hadamard();
+            }
+        }
         for(int i = 0; i < rows; i++) {
             String num = Math.random() > 0.5 ? "0" : "1";
             grid[i][0] = new Qubit(num);
-            correctAnswer += num; //temp
+            //correctAnswer += num; //temp
+            correctAnswer += grid[i][18 - layers].runOperation(grid[i][0]).getSymbol();
         }
+        //System.out.println(correctAnswer);
         fillGuesses();
+    }
+
+    public boolean hasSuperposition() {
+        for(int i = 0; i < rows; i++) {
+            if(grid[i][18 - layers].getSymbol().equals("H")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void fillGuesses() {
         //if you dont use the h gate:
         ArrayList<String> unused = new ArrayList<>();
-        for(int i = 0; i < nonSpAnswers.length; i++) {
-            unused.add(nonSpAnswers[i]);
+        if(hasSuperposition()) {
+            for(int i = 0; i < hasSpAnswers.length; i++) {
+                unused.add(hasSpAnswers[i]);
+            }
+        } else {
+            for(int i = 0; i < nonSpAnswers.length; i++) {
+                unused.add(nonSpAnswers[i]);
+            }
         }
         int cPos = (int) (Math.random() * 4);
         unused.remove(unused.indexOf(correctAnswer));
@@ -161,12 +210,6 @@ public class GatesGame implements Runnable {
     public void print() {
         //Sorry for the awful method, I just wanted a quick display :)
         String newFrame = "";
-/*
-        for(int i = 0; i < 100; i++) {
-            //System.out.println();
-            newFrame += "\n";
-        }
-            */
         for(int i = 0; i < 39; i++) {
             //System.out.print("-");
             newFrame += "-";
