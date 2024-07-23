@@ -18,6 +18,8 @@ public class GatesGame implements Runnable {
     private String correctAnswer;
     private String[] nonSpAnswers;
     private String[] hasSpAnswers;
+    private String[] hasSp2Row;
+    private String[] nonSp2Row;
     private String[] allStates;
     private String guess;
     private String[] guesses;
@@ -35,6 +37,8 @@ public class GatesGame implements Runnable {
         guesses = new String[] {"00", "01", "10", "11"};
         nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
         hasSpAnswers = new String[64];
+        hasSp2Row = new String[] {"00", "01", "0+", "0-", "10", "11", "1+", "1-", "+0", "+1", "++", "+-", "-0", "-1", "-+", "--"};
+        nonSp2Row = new String[] {"00", "01", "10", "11"};
         amountDone = 0;
         int numSoFar = 0;
         allStates = new String[] {"0", "1", "+", "-"};
@@ -120,7 +124,10 @@ public class GatesGame implements Runnable {
             correctAnswer += grid[0][17].runOperation(grid[0][0]).getSymbol();
         } else {
             rows = 3;
-            if(amountDone == 6) {
+            if(amountDone < 12 && amountDone >= 6) {
+                rows = 2;
+            }
+            if(amountDone == 6 || amountDone == 12) {
                 for(int i = 0; i < rows; i++) {
                     for(int j = 0; j < 20; j++) {
                         grid[i][j] = new Space();
@@ -159,15 +166,17 @@ public class GatesGame implements Runnable {
     public void fillGuesses() {
         if(amountDone < 6) {
             guesses = allStates;
-        } else {
+        } else{
+            String[] spList = rows == 2 ? hasSp2Row : hasSpAnswers;
+            String[] nonSpList = rows == 2 ? nonSp2Row : nonSpAnswers;
             ArrayList<String> unused = new ArrayList<>();
             if(hasSuperposition()) {
-                for(int i = 0; i < hasSpAnswers.length; i++) {
-                    unused.add(hasSpAnswers[i]);
+                for(int i = 0; i < spList.length; i++) {
+                    unused.add(spList[i]);
                 }
             } else {
-                for(int i = 0; i < nonSpAnswers.length; i++) {
-                    unused.add(nonSpAnswers[i]);
+                for(int i = 0; i < nonSpList.length; i++) {
+                    unused.add(nonSpList[i]);
                 }
             }
             int cPos = (int) (Math.random() * 4);
