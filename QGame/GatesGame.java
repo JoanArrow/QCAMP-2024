@@ -31,6 +31,8 @@ public class GatesGame implements Runnable {
     private JTextArea text;
     private JPanel panel;
     private int amountDone;
+    private int score;
+    private boolean instantGuessRequested;
 
     public GatesGame() {
         grid = new Space[3][20];
@@ -40,6 +42,8 @@ public class GatesGame implements Runnable {
         hasSp2Row = new String[] {"00", "01", "0+", "0-", "10", "11", "1+", "1-", "+0", "+1", "++", "+-", "-0", "-1", "-+", "--"};
         nonSp2Row = new String[] {"00", "01", "10", "11"};
         amountDone = 0;
+        instantGuessRequested = false;
+        score = 0;
         int numSoFar = 0;
         allStates = new String[] {"0", "1", "+", "-"};
         for(int i = 0; i < 4; i++) {
@@ -85,6 +89,9 @@ public class GatesGame implements Runnable {
                     case "r":
                         guess = guesses[3];
                         break;
+                    case " ":
+                        instantGuessRequested = true;
+                        break;
                 }
             }
         });
@@ -108,10 +115,19 @@ public class GatesGame implements Runnable {
         }
     }
 
+    public void clearBoard() {
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < 20; j++) {
+                grid[i][j] = new Space();
+            }
+        }
+    }
+
     public void spawnNewQubits() {
         correctAnswer = "";
         guess = "NaN";
         if(amountDone < 6) {
+            clearBoard();
             switch(amountDone) {
                 case 0: grid[0][17] = new Identity(); grid[0][0] = new Qubit("0"); break;
                 case 1: grid[0][17] = new Identity(); grid[0][0] = new Qubit("1"); break;
@@ -123,6 +139,7 @@ public class GatesGame implements Runnable {
             }
             correctAnswer += grid[0][17].runOperation(grid[0][0]).getSymbol();
         } else {
+            clearBoard();
             rows = 3;
             if(amountDone < 12 && amountDone >= 6) {
                 rows = 2;
@@ -217,7 +234,7 @@ public class GatesGame implements Runnable {
     }
 
     public void checkWinOrLoss() {
-        if(getQubitPosition() == 17) {
+        if(getQubitPosition() == 17 || instantGuessRequested) {
             if(!currentGuessCorrect()) {
                 lives--;
                 //System.out.println("Game Over!");
@@ -225,7 +242,10 @@ public class GatesGame implements Runnable {
                 if(lives == 0) {
                     panel.remove(text);
                 }
+            } else {
+                score += rows;
             }
+            instantGuessRequested = false;
             spawnNewQubits();
         }
     }
@@ -256,6 +276,7 @@ public class GatesGame implements Runnable {
         newFrame += "Correct answer (for testing): |" + correctAnswer + ">\n";
         //System.out.println("Lives Remaining: " + lives);
         newFrame += "Lives Remaining: " + lives + "\n";
+        newFrame += "Score:          " + score + "\n";
         //System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
         newFrame += "Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">\n";
         for(int i = 0; i < 39; i++) {
