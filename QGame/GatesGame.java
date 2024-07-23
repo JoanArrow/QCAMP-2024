@@ -1,15 +1,18 @@
 package QGame;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.awt.*;
+import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -36,7 +39,13 @@ public class GatesGame implements Runnable {
         layers = 1;
         rows = 3;
         lives = 3;
+        
+        ImageIcon WImg = new ImageIcon("C:/Users/dhall/OneDrive/Documents/GitHub/QCAMP-2024/QGame/WImagr.jpg");
+        
+        
         frame = new JFrame("Gates Game");
+        frame.add(new JLabel(WImg));
+        frame.pack();
         frame.setVisible(true);
         frame.setSize(new Dimension(500, 300));
         frame.setLocation(new Point(300, 300));
@@ -158,6 +167,7 @@ public class GatesGame implements Runnable {
         timeToNext.schedule(step, 0, speed);
     }
 
+
     public void print() {
         //Sorry for the awful method, I just wanted a quick display :)
         String newFrame = "";
@@ -167,10 +177,14 @@ public class GatesGame implements Runnable {
             newFrame += "\n";
         }
             */
+        
+
+
         for(int i = 0; i < 39; i++) {
             //System.out.print("-");
             newFrame += "-";
         }
+        
         //System.out.println();
         newFrame += "\n";
         //System.out.println("Correct answer (for testing): |" + correctAnswer + ">");
@@ -178,9 +192,9 @@ public class GatesGame implements Runnable {
         //System.out.println("Lives Remaining: " + lives);
         newFrame += "Lives Remaining: " + lives + "\n";
         //System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
-        newFrame += "Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">\n";
+        newFrame += "Q: |" + guesses[0] + ">,W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">\n";
         for(int i = 0; i < 39; i++) {
-            //System.out.print("-");
+        //  System.out.print("-");
             newFrame += "-";
         }
         //System.out.println();
@@ -220,8 +234,10 @@ public class GatesGame implements Runnable {
         print();
         ticker();
     }
+    
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new GatesGame());
     }
+        
 }
