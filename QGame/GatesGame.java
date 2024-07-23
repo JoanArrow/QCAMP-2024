@@ -18,6 +18,7 @@ public class GatesGame implements Runnable {
     private String correctAnswer;
     private String[] nonSpAnswers;
     private String[] hasSpAnswers;
+    private String[] allStates;
     private String guess;
     private String[] guesses;
     private int speed;
@@ -27,21 +28,23 @@ public class GatesGame implements Runnable {
     private JFrame frame;
     private JTextArea text;
     private JPanel panel;
+    private int amountDone;
 
     public GatesGame() {
         grid = new Space[3][20];
         guesses = new String[] {"00", "01", "10", "11"};
         nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
         hasSpAnswers = new String[64];
+        amountDone = 0;
         int numSoFar = 0;
-        String[] translator = new String[] {"0", "1", "+", "-"};
+        allStates = new String[] {"0", "1", "+", "-"};
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
                 for(int l = 0; l < 4; l++) {
                     String toAdd = "";
-                    toAdd += translator[i];
-                    toAdd += translator[j];
-                    toAdd += translator[l];
+                    toAdd += allStates[i];
+                    toAdd += allStates[j];
+                    toAdd += allStates[l];
                     hasSpAnswers[numSoFar] = toAdd;
                     toAdd = "";
                     numSoFar++;
@@ -51,7 +54,7 @@ public class GatesGame implements Runnable {
         guess = "NaN";
         speed = 650;
         layers = 1;
-        rows = 3;
+        rows = 1;
         lives = 3;
         frame = new JFrame("Gates Game");
         frame.setVisible(true);
@@ -104,23 +107,44 @@ public class GatesGame implements Runnable {
     public void spawnNewQubits() {
         correctAnswer = "";
         guess = "NaN";
-        for(int row = 0; row < rows; row++) {
-            if(Math.random() < 0.33) {
-                grid[row][18 - layers] = new Identity();
-            } else if (Math.random() < 0.5) {
-                grid[row][18 - layers] = new Not();
-            } else {
-                grid[row][18 - layers] = new Hadamard();
+        if(amountDone < 6) {
+            switch(amountDone) {
+                case 0: grid[0][17] = new Identity(); grid[0][0] = new Qubit("0"); break;
+                case 1: grid[0][17] = new Identity(); grid[0][0] = new Qubit("1"); break;
+                case 2: grid[0][17] = new Not(); grid[0][0] = new Qubit("0"); break;
+                case 3: grid[0][17] = new Not(); grid[0][0] = new Qubit("1"); break;
+                case 4: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("0"); break;
+                case 5: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("1"); break;
+                default: System.out.println("Error in spawning qubits and gates (first 6 rounds)");
+            }
+            correctAnswer += grid[0][17].runOperation(grid[0][0]).getSymbol();
+        } else {
+            rows = 3;
+            if(amountDone == 6) {
+                for(int i = 0; i < rows; i++) {
+                    for(int j = 0; j < 20; j++) {
+                        grid[i][j] = new Space();
+                    }
+                }
+            }
+            for(int row = 0; row < rows; row++) {
+                if(Math.random() < 0.33) {
+                    grid[row][18 - layers] = new Identity();
+                } else if (Math.random() < 0.5) {
+                    grid[row][18 - layers] = new Not();
+                } else {
+                    grid[row][18 - layers] = new Hadamard();
+                }
+            }
+            for(int i = 0; i < rows; i++) {
+                String num = Math.random() > 0.5 ? "0" : "1";
+                grid[i][0] = new Qubit(num);
+                //correctAnswer += num; //temp
+                correctAnswer += grid[i][18 - layers].runOperation(grid[i][0]).getSymbol();
             }
         }
-        for(int i = 0; i < rows; i++) {
-            String num = Math.random() > 0.5 ? "0" : "1";
-            grid[i][0] = new Qubit(num);
-            //correctAnswer += num; //temp
-            correctAnswer += grid[i][18 - layers].runOperation(grid[i][0]).getSymbol();
-        }
-        //System.out.println(correctAnswer);
         fillGuesses();
+        amountDone++;
     }
 
     public boolean hasSuperposition() {
@@ -133,25 +157,28 @@ public class GatesGame implements Runnable {
     }
 
     public void fillGuesses() {
-        //if you dont use the h gate:
-        ArrayList<String> unused = new ArrayList<>();
-        if(hasSuperposition()) {
-            for(int i = 0; i < hasSpAnswers.length; i++) {
-                unused.add(hasSpAnswers[i]);
-            }
+        if(amountDone < 6) {
+            guesses = allStates;
         } else {
-            for(int i = 0; i < nonSpAnswers.length; i++) {
-                unused.add(nonSpAnswers[i]);
+            ArrayList<String> unused = new ArrayList<>();
+            if(hasSuperposition()) {
+                for(int i = 0; i < hasSpAnswers.length; i++) {
+                    unused.add(hasSpAnswers[i]);
+                }
+            } else {
+                for(int i = 0; i < nonSpAnswers.length; i++) {
+                    unused.add(nonSpAnswers[i]);
+                }
             }
-        }
-        int cPos = (int) (Math.random() * 4);
-        unused.remove(unused.indexOf(correctAnswer));
-        guesses[cPos] = correctAnswer;
-        for(int i = 0; i < 4; i++) {
-            if(i != cPos) {
-                int ranUnused = (int) (Math.random() * unused.size());
-                guesses[i] = unused.get(ranUnused);
-                unused.remove(ranUnused);
+            int cPos = (int) (Math.random() * 4);
+            unused.remove(unused.indexOf(correctAnswer));
+            guesses[cPos] = correctAnswer;
+            for(int i = 0; i < 4; i++) {
+                if(i != cPos) {
+                    int ranUnused = (int) (Math.random() * unused.size());
+                    guesses[i] = unused.get(ranUnused);
+                    unused.remove(ranUnused);
+                }
             }
         }
     }
