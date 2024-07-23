@@ -44,17 +44,20 @@ public class GatesGame implements Runnable {
         
         
         frame = new JFrame("Gates Game");
-        frame.add(new JLabel(WImg));
-        frame.pack();
-        frame.setVisible(true);
+    
         frame.setSize(new Dimension(500, 300));
         frame.setLocation(new Point(300, 300));
         text = new JTextArea("helloooo");
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        frame.add(new JLabel(WImg));
+        frame.pack();
+        frame.setVisible(true);
         frame.getContentPane().add(panel);
         panel.add(text, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+
         text.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 switch (Character.toString(e.getKeyChar())) {
