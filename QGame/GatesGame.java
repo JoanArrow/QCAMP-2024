@@ -2,6 +2,7 @@ package QGame;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -66,9 +67,10 @@ public class GatesGame implements Runnable {
         lives = 3;
         frame = new JFrame("Gates Game");
         frame.setVisible(true);
-        frame.setSize(new Dimension(500, 300));
+        frame.setSize(new Dimension(1000, 600));
         frame.setLocation(new Point(300, 300));
         text = new JTextArea("helloooo");
+        text.setFont(new Font("Consolas", Font.PLAIN, 20));
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         frame.getContentPane().add(panel);
@@ -264,54 +266,44 @@ public class GatesGame implements Runnable {
     }
 
     public void print() {
-        //Sorry for the awful method, I just wanted a quick display :)
         String newFrame = "";
-        for(int i = 0; i < 39; i++) {
-            //System.out.print("-");
+        newFrame += "+";
+        for(int i = 0; i < 47; i++) {
             newFrame += "-";
         }
-        //System.out.println();
-        newFrame += "\n";
-        //System.out.println("Correct answer (for testing): |" + correctAnswer + ">");
-        newFrame += "Correct answer (for testing): |" + correctAnswer + ">\n";
-        //System.out.println("Lives Remaining: " + lives);
-        newFrame += "Lives Remaining: " + lives + "\n";
-        newFrame += "Score:          " + score + "\n";
-        //System.out.println("Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">");
-        newFrame += "Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">\n";
-        for(int i = 0; i < 39; i++) {
-            //System.out.print("-");
+        newFrame += "+\n";
+        newFrame += "|Lives Remaining: " + lives + "                             |\n";
+        newFrame += "|Score:           " + score + "                             |\n";
+        newFrame += "|Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">                 |\n";
+        newFrame += "+";
+        for(int i = 0; i < 47; i++) {
             newFrame += "-";
         }
-        //System.out.println();
-        newFrame += "\n";
+        newFrame += "+\n";
         for(int i = 0; i < rows; i++) {
             Space[] row = grid[i];
-            //System.out.print("|");
             newFrame += "|";
+            if(getQubitPosition() == 17) {
+                newFrame += " ";
+            }
             for(Space s : row) {
                 String symbol = s.getSymbol();
                 if(symbol.equals("0") || symbol.equals("1") || symbol.equals("+") || symbol.equals("-")) {
-                    //System.out.print("|" + symbol + ">");
                     newFrame += "|" + symbol + ">";
                 } else {
-                    //System.out.print(" " + s.getSymbol());
                     newFrame += " " + symbol;
                     if(symbol.equals("")) {
-                        //System.out.print(" ");
                         newFrame += " ";
                     }
                 }
             }
-            //System.out.println(guess.equals("NaN") ? "|" : "|   |" + guess.substring(i, i + 1) + ">");
-            newFrame += guess.equals("NaN") ? "|\n" : "|   |" + guess.substring(i, i + 1) + ">\n";
+            newFrame += guess.equals("NaN") ? "=     |\n" : "= |" + guess.substring(i, i + 1) + "> |\n";
         }
-        for(int i = 0; i < 39; i++) {
-            //System.out.print("-");
+        newFrame += "+";
+        for(int i = 0; i < 47; i++) {
             newFrame += "-";
         }
-        //System.out.println();
-        newFrame += "\n";
+        newFrame += "+\n";
         text.setText(newFrame);
     }
 
