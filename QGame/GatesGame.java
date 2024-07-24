@@ -273,8 +273,10 @@ public class GatesGame implements Runnable {
         }
         newFrame += "+\n";
         newFrame += "|Lives Remaining: " + lives + "                             |\n";
-        newFrame += "|Score:           " + score + "                             |\n";
-        newFrame += "|Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">                 |\n";
+        newFrame += "|Score:           " + score;
+        newFrame += score < 10 ? "                             |\n" : "                            |\n";
+        newFrame += "|Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">";
+        newFrame += rows == 1 ? "                 |\n" : rows == 2 ? "             |\n" : "         |\n";
         newFrame += "+";
         for(int i = 0; i < 47; i++) {
             newFrame += "-";
