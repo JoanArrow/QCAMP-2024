@@ -50,11 +50,11 @@ public class GatesGame implements Runnable {
         text = new JTextArea("helloooo");
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        frame.add(new JLabel(WImg));
-        frame.pack();
+        panel.add(new JLabel(WImg));
+        panel.add(text, BorderLayout.CENTER);
+        
         frame.setVisible(true);
         frame.getContentPane().add(panel);
-        panel.add(text, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
 
