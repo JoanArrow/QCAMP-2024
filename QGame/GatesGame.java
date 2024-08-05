@@ -34,6 +34,7 @@ public class GatesGame implements Runnable {
     private int amountDone;
     private int score;
     private boolean instantGuessRequested;
+    private String prevCorrectAnswer;
 
     public GatesGame() {
         grid = new Space[3][20];
@@ -44,6 +45,7 @@ public class GatesGame implements Runnable {
         nonSp2Row = new String[] {"00", "01", "10", "11"};
         amountDone = 0;
         instantGuessRequested = false;
+        prevCorrectAnswer = " ";
         score = 0;
         int numSoFar = 0;
         allStates = new String[] {"0", "1", "+", "-"};
@@ -248,6 +250,7 @@ public class GatesGame implements Runnable {
 
     public void checkWinOrLoss() {
         if(getQubitPosition() == 17 || instantGuessRequested) {
+            prevCorrectAnswer = correctAnswer;
             if(!currentGuessCorrect()) {
                 lives--;
                 //System.out.println("Game Over!");
@@ -279,23 +282,33 @@ public class GatesGame implements Runnable {
     public void print() {
         String newFrame = "";
         newFrame += "+";
-        for(int i = 0; i < 47; i++) {
+        for(int i = 0; i < 53; i++) {
             newFrame += "-";
         }
         newFrame += "+\n";
-        newFrame += "|Lives Remaining: " + lives + "                             |\n";
+        newFrame += "|Lives Remaining: " + lives + "                                   |\n";
         newFrame += "|Score:           " + score;
-        newFrame += score < 10 ? "                             |\n" : "                            |\n";
+        newFrame += score < 10 ? "                                   |\n" : "                                  |\n";
         newFrame += "|Q: |" + guesses[0] + ">, W: |" + guesses[1] + ">, E: |" + guesses[2] + ">, R: |" + guesses[3] + ">";
-        newFrame += rows == 1 ? "                 |\n" : rows == 2 ? "             |\n" : "         |\n";
+        newFrame += rows == 1 ? "                       |\n" : rows == 2 ? "                   |\n" : "               |\n";
         newFrame += "+";
-        for(int i = 0; i < 47; i++) {
+        for(int i = 0; i < 53; i++) {
             newFrame += "-";
         }
         newFrame += "+\n";
         for(int i = 0; i < rows; i++) {
             Space[] row = grid[i];
             newFrame += "|";
+            if((amountDone == 13 || amountDone == 19) && i + 1 == rows) {
+                newFrame += "     |";
+            } else {
+                if(i + 1 == rows) {
+                    //Im tired, cant be bothered to figure out a better way to do this :sob:
+                    newFrame += amountDone == 1 ? "  " + prevCorrectAnswer.substring(i) + "  |" : " |" + prevCorrectAnswer.substring(i) + "> |";
+                } else {
+                    newFrame += amountDone == 1 ? "  " + prevCorrectAnswer.substring(i, i + 1) + "  |" : " |" + prevCorrectAnswer.substring(i, i + 1) + "> |";
+                }
+            }   
             if(getQubitPosition() == 17) {
                 newFrame += " ";
             }
@@ -313,7 +326,7 @@ public class GatesGame implements Runnable {
             newFrame += guess.equals("NaN") ? "=     |\n" : "= |" + guess.substring(i, i + 1) + "> |\n";
         }
         newFrame += "+";
-        for(int i = 0; i < 47; i++) {
+        for(int i = 0; i < 53; i++) {
             newFrame += "-";
         }
         newFrame += "+\n";
