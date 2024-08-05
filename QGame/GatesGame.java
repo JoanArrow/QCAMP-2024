@@ -163,7 +163,7 @@ public class GatesGame implements Runnable {
                 }
             }
             for(int i = 0; i < rows; i++) {
-                String num = Math.random() > 0.5 ? "0" : "1";
+                String num = Math.random() > 0.75 ? "0" : Math.random() > 0.67 ? "1" : Math.random() > 0.5 ? "+" : "-";
                 grid[i][0] = new Qubit(num);
                 //correctAnswer += num; //temp
                 correctAnswer += grid[i][18 - layers].runOperation(grid[i][0]).getSymbol();
@@ -176,6 +176,11 @@ public class GatesGame implements Runnable {
     public boolean hasSuperposition() {
         for(int i = 0; i < rows; i++) {
             if(grid[i][18 - layers].getSymbol().equals("H")) {
+                return true;
+            }
+        }
+        for(int i = 0; i < rows; i++) {
+            if(grid[i][getQubitPosition()].isSuperposition()) {
                 return true;
             }
         }
