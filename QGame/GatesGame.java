@@ -128,25 +128,31 @@ public class GatesGame implements Runnable {
     public void spawnNewQubits() {
         correctAnswer = "";
         guess = "NaN";
-        if(amountDone < 6) {
+        if(amountDone < 12) {
             clearBoard();
             switch(amountDone) {
                 case 0: grid[0][17] = new Identity(); grid[0][0] = new Qubit("0"); break;
                 case 1: grid[0][17] = new Identity(); grid[0][0] = new Qubit("1"); break;
-                case 2: grid[0][17] = new Not(); grid[0][0] = new Qubit("0"); break;
-                case 3: grid[0][17] = new Not(); grid[0][0] = new Qubit("1"); break;
-                case 4: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("0"); break;
-                case 5: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("1"); break;
+                case 2: grid[0][17] = new Identity(); grid[0][0] = new Qubit("+"); break;
+                case 3: grid[0][17] = new Identity(); grid[0][0] = new Qubit("-"); break;
+                case 4: grid[0][17] = new Not(); grid[0][0] = new Qubit("0"); break;
+                case 5: grid[0][17] = new Not(); grid[0][0] = new Qubit("1"); break;
+                case 6: grid[0][17] = new Not(); grid[0][0] = new Qubit("+"); break;
+                case 7: grid[0][17] = new Not(); grid[0][0] = new Qubit("-"); break;
+                case 8: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("0"); break;
+                case 9: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("1"); break;
+                case 10: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("+"); break;
+                case 11: grid[0][17] = new Hadamard(); grid[0][0] = new Qubit("-"); break;
                 default: System.out.println("Error in spawning qubits and gates (first 6 rounds)");
             }
             correctAnswer += grid[0][17].runOperation(grid[0][0]).getSymbol();
         } else {
             clearBoard();
             rows = 3;
-            if(amountDone < 12 && amountDone >= 6) {
+            if(amountDone < 18 && amountDone >= 12) {
                 rows = 2;
             }
-            if(amountDone == 6 || amountDone == 12) {
+            if(amountDone == 12 || amountDone == 18) {
                 for(int i = 0; i < rows; i++) {
                     for(int j = 0; j < 20; j++) {
                         grid[i][j] = new Space();
@@ -188,7 +194,7 @@ public class GatesGame implements Runnable {
     }
 
     public void fillGuesses() {
-        if(amountDone < 6) {
+        if(amountDone < 12) {
             guesses = allStates;
         } else{
             String[] spList = rows == 2 ? hasSp2Row : hasSpAnswers;
