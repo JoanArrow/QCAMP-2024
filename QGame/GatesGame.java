@@ -14,8 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import QGame.Pieces.Empty;
+import QGame.Pieces.Hadamard;
+import QGame.Pieces.Identity;
+import QGame.Pieces.Not;
+import QGame.Pieces.Qubit;
+
 public class GatesGame implements Runnable {
-    private Space[][] grid;
+    private Piece[][] grid;
     private String correctAnswer;
     private String[] nonSpAnswers;
     private String[] hasSpAnswers;
@@ -37,7 +43,7 @@ public class GatesGame implements Runnable {
     private String prevCorrectAnswer;
 
     public GatesGame() {
-        grid = new Space[3][20];
+        grid = new Piece[3][20];
         guesses = new String[] {"00", "01", "10", "11"};
         nonSpAnswers = new String[] {"000", "001", "010", "011", "100", "101", "110", "111"};
         hasSpAnswers = new String[64];
@@ -113,7 +119,7 @@ public class GatesGame implements Runnable {
                 }
             } else {
                 for(int row = 0; row < rows; row++) {
-                    grid[row][col] = new Space();
+                    grid[row][col] = new Empty();
                 }
             }
         }
@@ -122,7 +128,7 @@ public class GatesGame implements Runnable {
     public void clearBoard() {
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < 20; j++) {
-                grid[i][j] = new Space();
+                grid[i][j] = new Empty();
             }
         }
     }
@@ -157,7 +163,7 @@ public class GatesGame implements Runnable {
             if(amountDone == 12 || amountDone == 18) {
                 for(int i = 0; i < rows; i++) {
                     for(int j = 0; j < 20; j++) {
-                        grid[i][j] = new Space();
+                        grid[i][j] = new Empty();
                     }
                 }
             }
@@ -231,7 +237,7 @@ public class GatesGame implements Runnable {
             }
         }
         for(int i = 0; i < rows; i++) {
-            grid[i][0] = new Space();
+            grid[i][0] = new Empty();
         }
     }
 
@@ -297,7 +303,7 @@ public class GatesGame implements Runnable {
         }
         newFrame += "+\n";
         for(int i = 0; i < rows; i++) {
-            Space[] row = grid[i];
+            Piece[] row = grid[i];
             newFrame += "|";
             if((amountDone == 13 || amountDone == 19) && i + 1 == rows) {
                 newFrame += "     |";
@@ -312,7 +318,7 @@ public class GatesGame implements Runnable {
             if(getQubitPosition() == 17) {
                 newFrame += " ";
             }
-            for(Space s : row) {
+            for(Piece s : row) {
                 String symbol = s.getSymbol();
                 if(symbol.equals("0") || symbol.equals("1") || symbol.equals("+") || symbol.equals("-")) {
                     newFrame += "|" + symbol + ">";

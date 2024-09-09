@@ -1,6 +1,8 @@
-package QGame;
+package QGame.Pieces;
 
-public class Qubit extends Space {
+import QGame.Piece;
+
+public class Qubit implements Piece {
     private String state; //not using ints becuase superposition (+, -, i, -i) (are we doing i and -i??)
 
     public Qubit(String state) {

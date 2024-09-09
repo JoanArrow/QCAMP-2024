@@ -1,11 +1,13 @@
-package QGame;
+package QGame.Pieces;
 
-public class Not extends Gate{
-    public Not() {
-        super("X");
+import QGame.Piece;
+
+public class Not implements Piece {
+    public String getSymbol() {
+        return "X";
     }
 
-    public Space runOperation(Space input) {
+    public Piece runOperation(Piece input) {
         if(input.isSuperposition()) {
             return input;
         }

@@ -1,11 +1,14 @@
-package QGame;
+package QGame.Pieces;
 
-public class Hadamard extends Gate{
-    public Hadamard() {
-        super("H");
+import QGame.Piece;
+
+public class Hadamard implements Piece {
+
+    public String getSymbol() {
+        return "H";
     }
 
-    public Space runOperation(Space input) {
+    public Piece runOperation(Piece input) {
         switch (input.getSymbol()) {
             case "0":
                 return new Qubit("+");
